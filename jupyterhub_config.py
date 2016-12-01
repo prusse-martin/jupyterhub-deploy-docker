@@ -1,6 +1,7 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
 
+
 # Configuration file for JupyterHub
 import os
 
@@ -35,25 +36,40 @@ notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan/work'
 c.DockerSpawner.notebook_dir = notebook_dir
 # Mount the real user's Docker volume on the host to the notebook user's
 # notebook directory in the container
-c.DockerSpawner.volumes = { 'jupyterhub-user-{username}': notebook_dir }
+#c.DockerSpawner.volumes = { 'jupyterhub-user-{username}': notebook_dir }
+#c.DockerSpawner.volumes = { 'jupyterhub-user-shared': notebook_dir }
+c.DockerSpawner.volumes = { '/home/jenkins/jupyter-user-work': notebook_dir }
 c.DockerSpawner.extra_create_kwargs.update({ 'volume_driver': 'local' })
 # Remove containers once they are stopped
 c.DockerSpawner.remove_containers = True
 # For debugging arguments passed to spawned containers
 c.DockerSpawner.debug = True
+# Add alfasim prototypes
+c.DockerSpawner.read_only_volumes = { '/home/jenkins/alfasim-prototypes': '/alfasim-prototypes' }
+c.DockerSpawner.environment = { 'PYTHONPATH': '/alfasim-prototypes/alfasim' } 
 
 # User containers will access hub by container name on the Docker network
 c.JupyterHub.hub_ip = 'jupyterhub'
 c.JupyterHub.hub_port = 8080
 
-# TLS config
-c.JupyterHub.port = 443
-c.JupyterHub.ssl_key = os.environ['SSL_KEY']
-c.JupyterHub.ssl_cert = os.environ['SSL_CERT']
+## TLS config
+#c.JupyterHub.port = 443
+#c.JupyterHub.ssl_key = os.environ['SSL_KEY']
+#c.JupyterHub.ssl_cert = os.environ['SSL_CERT']
+c.JupyterHub.port = 80
 
-# Authenticate users with GitHub OAuth
-c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
-c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
+## Authenticate users with GitHub OAuth
+#c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
+#c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
+
+## Using ldap
+#c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
+#c.LDAPAuthenticator.server_address = '10.0.0.1'
+#c.LDAPAuthenticator.bind_dn_template = 'uid={username},ou=Users,ou=EXAMPLE,dc=example,dc=br'
+#c.LDAPAuthenticator.use_ssl = False
+
+# Testing
+c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
 
 # Persist hub data on volume mounted inside container
 data_dir = os.environ.get('DATA_VOLUME_CONTAINER', '/data')
@@ -75,3 +91,4 @@ with open(os.path.join(pwd, 'userlist')) as f:
         whitelist.add(name)
         if len(parts) > 1 and parts[1] == 'admin':
             admin.add(name)
+

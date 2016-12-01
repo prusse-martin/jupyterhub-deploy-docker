@@ -14,14 +14,14 @@ volumes:
 self-signed-cert:
 	# make a self-signed cert
 
-secrets/jupyterhub.crt:
-	@echo "Need an SSL certificate in secrets/jupyterhub.crt"
-	@exit 1
-
-secrets/jupyterhub.key:
-	@echo "Need an SSL key in secrets/jupyterhub.key"
-	@exit 1
-
+#secrets/jupyterhub.crt:
+#	@echo "Need an SSL certificate in secrets/jupyterhub.crt"
+#	@exit 1
+#
+#secrets/jupyterhub.key:
+#	@echo "Need an SSL key in secrets/jupyterhub.key"
+#	@exit 1
+#
 userlist:
 	@echo "Add usernames, one per line, to ./userlist, such as:"
 	@echo "    zoe admin"
@@ -36,7 +36,8 @@ else
 	cert_files=
 endif
 
-check-files: userlist $(cert_files)
+#check-files: userlist $(cert_files)
+check-files: userlist
 
 pull:
 	docker pull $(DOCKER_NOTEBOOK_IMAGE)
