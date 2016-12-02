@@ -23,6 +23,15 @@ self-signed-cert:
 #	@echo "Need an SSL key in secrets/jupyterhub.key"
 #	@exit 1
 #
+
+conda/.condarc:
+	@echo "Need a conda/.condarc file"
+	@exit 1
+
+conda/requirements.txt:
+	@echo "Need a conda/requirements.txt file"
+	@exit 1
+
 userlist:
 	@echo "Add usernames, one per line, to ./userlist, such as:"
 	@echo "    zoe admin"
@@ -37,6 +46,8 @@ else
 	cert_files=
 endif
 
+singleuser_conda_files=conda/.condarc conda/requirements.txt
+
 #check-files: userlist $(cert_files)
 check-files: userlist
 
@@ -45,7 +56,14 @@ pull:
 
 notebook_image: pull
 
-build: check-files network volumes
+build-service:
+	@echo "Building jupytherhub service image..."
 	docker-compose build
 
-.PHONY: network volumes check-files pull notebook_image build
+build-single: $(singleuser_conda_files)
+	@echo "Building single user image..."
+	docker build -t jupyterhub-singleuser -f Dockerfile.jupyterhub-singleuser .
+
+build: check-files network volumes build-service build-single
+
+.PHONY: network volumes check-files pull notebook_image build-service build-single build
