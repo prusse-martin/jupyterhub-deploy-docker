@@ -7,6 +7,13 @@ import os
 
 c = get_config()
 
+# ABSOLUTE URLs!!!
+c.JupyterHub.base_url = '/jupyter-alfa/'
+
+# Set the log level by value or name.
+#c.JupyterHub.log_level = 'DEBUG'
+#c.Spawner.debug = True
+
 # We rely on environment variables to configure JupyterHub so that we
 # avoid having to rebuild the JupyterHub container every time we change a
 # configuration parameter.
@@ -53,23 +60,24 @@ c.JupyterHub.hub_ip = 'jupyterhub'
 c.JupyterHub.hub_port = 8080
 
 # TLS config
-c.JupyterHub.port = 443
+#c.JupyterHub.port = 443
 c.JupyterHub.ssl_key = os.environ['SSL_KEY']
 c.JupyterHub.ssl_cert = os.environ['SSL_CERT']
 #c.JupyterHub.port = 80
+c.JupyterHub.port = 8765
 
-## Authenticate users with GitHub OAuth
-#c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
-#c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
+# Authenticate users with GitHub OAuth
+c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
+c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
 
 ## Using ldap
 #c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
 #c.LDAPAuthenticator.server_address = '10.0.0.1'
-#c.LDAPAuthenticator.bind_dn_template = 'uid={username},ou=Users,ou=EXAMPLE,dc=example,dc=br'
-#c.LDAPAuthenticator.use_ssl = False
+#c.LDAPAuthenticator.bind_dn_template = 'uid={username},ou=Users,ou=EXAMPLE,dc=example,dc=com'
+##c.LDAPAuthenticator.use_ssl = False
 
-# Testing
-c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
+## Testing
+#c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
 
 # Persist hub data on volume mounted inside container
 data_dir = os.environ.get('DATA_VOLUME_CONTAINER', '/data')

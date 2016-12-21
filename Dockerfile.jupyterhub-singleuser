@@ -1,5 +1,6 @@
 #FROM jupyter/scipy-notebook:2d878db5cbff
-FROM jupyter/minimal-notebook:latest
+#FROM jupyter/minimal-notebook:latest
+FROM jupyterhub/singleuser:latest
 
 COPY ./conda/requirements.txt /home/jovyan/requirements.txt
 COPY ./conda/.condarc /home/jovyan/.condarc
