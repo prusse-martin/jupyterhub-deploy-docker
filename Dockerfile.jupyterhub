@@ -23,4 +23,7 @@ COPY ./secrets/*.key $SSL_KEY
 RUN chmod 700 /srv/jupyterhub/secrets && \
     chmod 600 /srv/jupyterhub/secrets/*
 
+COPY ./json_auth.py /opt/json_auth/json_auth.py
+ENV PYTHONPATH /opt/json_auth
+
 COPY ./userlist /srv/jupyterhub/userlist
