@@ -17,10 +17,12 @@ self-signed-cert:
 
 secrets/jupyterhub.crt:
 	@echo "Need an SSL certificate in secrets/jupyterhub.crt"
+	@echo "Could be a self-signed cert"
 	@exit 1
 
 secrets/jupyterhub.key:
 	@echo "Need an SSL key in secrets/jupyterhub.key"
+	@echo "Could be a self-signed cert"
 	@exit 1
 
 conda/.condarc:

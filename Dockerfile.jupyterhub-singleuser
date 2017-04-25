@@ -2,7 +2,9 @@
 #FROM jupyter/minimal-notebook:latest
 FROM jupyterhub/singleuser:latest
 
+# requirements will be installed into root environment
 COPY ./conda/requirements.txt /home/jovyan/requirements.txt
+# custom .condarc
 COPY ./conda/.condarc /home/jovyan/.condarc
 ENV CONDARC=/home/jovyan/.condarc
 RUN conda install -n root --file /home/jovyan/requirements.txt \
