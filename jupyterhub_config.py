@@ -5,6 +5,8 @@
 # Configuration file for JupyterHub
 import os
 
+BASE_WORK_DIR = '/home/jenkins/'
+
 c = get_config()
 
 # ABSOLUTE URLs!!!
@@ -45,14 +47,14 @@ c.DockerSpawner.notebook_dir = notebook_dir
 # notebook directory in the container
 #c.DockerSpawner.volumes = { 'jupyterhub-user-{username}': notebook_dir }
 #c.DockerSpawner.volumes = { 'jupyterhub-user-shared': notebook_dir }
-c.DockerSpawner.volumes = { '/home/jenkins/jupyter-user-work': notebook_dir }
+c.DockerSpawner.volumes = { BASE_WORK_DIR + 'jupyter-user-work': notebook_dir }
 c.DockerSpawner.extra_create_kwargs.update({ 'volume_driver': 'local' })
 # Remove containers once they are stopped
 c.DockerSpawner.remove_containers = True
 # For debugging arguments passed to spawned containers
 c.DockerSpawner.debug = True
 # Add alfasim prototypes
-c.DockerSpawner.read_only_volumes = { '/home/jenkins/alfasim-prototypes': '/alfasim-prototypes' }
+c.DockerSpawner.read_only_volumes = { BASE_WORK_DIR + 'alfasim-prototypes': '/alfasim-prototypes' }
 c.DockerSpawner.environment = { 'PYTHONPATH': '/alfasim-prototypes/alfasim:/alfasim-prototypes/alfasim/prototypes' } 
 
 # User containers will access hub by container name on the Docker network
