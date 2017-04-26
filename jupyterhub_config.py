@@ -68,10 +68,9 @@ c.JupyterHub.ssl_cert = os.environ['SSL_CERT']
 #c.JupyterHub.port = 80
 c.JupyterHub.port = 8765
 
-data_dir = os.environ.get('DATA_VOLUME_CONTAINER', '/data')
 
 c.JupyterHub.authenticator_class = 'json_auth.JsonAuthenticator'
-c.JsonAuthenticator.passwords_file = os.path.join(data_dir, 'passwd')
+c.JsonAuthenticator.passwords_file = os.environ['PASSWD']
 
 ## Authenticate users with GitHub OAuth
 #c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
@@ -87,6 +86,7 @@ c.JsonAuthenticator.passwords_file = os.path.join(data_dir, 'passwd')
 #c.JupyterHub.authenticator_class = 'dummyauthenticator.DummyAuthenticator'
 
 # Persist hub data on volume mounted inside container
+data_dir = os.environ.get('DATA_VOLUME_CONTAINER', '/data')
 c.JupyterHub.db_url = os.path.join('sqlite:///', data_dir, 'jupyterhub.sqlite')
 c.JupyterHub.cookie_secret_file = os.path.join(data_dir,
     'jupyterhub_cookie_secret')

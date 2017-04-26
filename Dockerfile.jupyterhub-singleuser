@@ -7,6 +7,9 @@ COPY ./conda/requirements.txt /home/jovyan/requirements.txt
 # custom .condarc
 COPY ./conda/.condarc /home/jovyan/.condarc
 ENV CONDARC=/home/jovyan/.condarc
+RUN rm /opt/conda/.condarc
+#RUN conda info
+#RUN conda config --show-sources
 RUN conda install -n root --file /home/jovyan/requirements.txt \
     && conda update --all -n root
 # ENV CONDARC=
